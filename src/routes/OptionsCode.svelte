@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { myStore } from '$lib/store/data';
-	import { modalStore } from '@skeletonlabs/skeleton';
+	import { LanguageNames, myStore } from '$lib/store/data';
+	import { modalStore, SlideToggle } from '@skeletonlabs/skeleton';
 
 	const { data } = myStore;
 
@@ -19,13 +19,13 @@
 </script>
 
 <div class="modal-example-form {cBase}">
-	<header class={cHeader}>Filter</header>
-	<article>
-		All letters on same line required. At least one line must match:
-		<strong>exa<br />mple</strong>
-		Matches: <strong />exam empl mple plemß
-	</article>
-	<textarea class="textarea" bind:value={$data.currentOptions.filter} name="filter text" />
+	<header class={cHeader}>Code</header>
+	<article>{$modalStore[0]?.body ?? '(body missing)'}</article>
+	{#each LanguageNames as name, i}
+		<div>
+			<SlideToggle {name} label={name} bind:checked={$data.languages[i]}>{name}</SlideToggle>
+		</div>
+	{/each}
 	<footer class="modal-footer {parent.regionFooter}">
 		<button class="btn {parent.buttonPositive}" on:click={onFormSubmit}><slot /></button>
 	</footer>

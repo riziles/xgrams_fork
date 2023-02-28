@@ -1,5 +1,5 @@
-export enum TrinaryValue {
+declare enum TrinaryValue {
 	false = 0,
 	true,
-	neither
+	neither,
 }

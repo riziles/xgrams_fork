@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { myStore } from '$lib/store/data';
-	import { modalStore } from '@skeletonlabs/skeleton';
+	import { LanguageNames, myStore, OptionIndex } from '$lib/store/data';
+	import { modalStore, SlideToggle } from '@skeletonlabs/skeleton';
 
 	const { data } = myStore;
 
@@ -19,13 +19,9 @@
 </script>
 
 <div class="modal-example-form {cBase}">
-	<header class={cHeader}>Filter</header>
-	<article>
-		All letters on same line required. At least one line must match:
-		<strong>exa<br />mple</strong>
-		Matches: <strong />exam empl mple plemß
-	</article>
-	<textarea class="textarea" bind:value={$data.currentOptions.filter} name="filter text" />
+	<header class={cHeader}>Custom Words</header>
+	<article>Add custom words, separated by spaces/newlines:</article>
+	<textarea class="textarea" rows="4" bind:value={$data.sourceOptions[OptionIndex.custom_words].phrases} />
 	<footer class="modal-footer {parent.regionFooter}">
 		<button class="btn {parent.buttonPositive}" on:click={onFormSubmit}><slot /></button>
 	</footer>

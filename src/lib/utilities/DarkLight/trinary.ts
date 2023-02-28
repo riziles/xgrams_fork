@@ -1,7 +1,11 @@
-import { TrinaryValue } from './trinary.d';
+export enum TrinaryValue {
+	false = 0,
+	true,
+	neither,
+}
 
 export class Trinary {
-	public value = TrinaryValue.false;
+	value = TrinaryValue.false;
 
 	constructor(value: number) {
 		this.value = Math.abs(value % 3);
@@ -9,13 +13,15 @@ export class Trinary {
 	/**
 	 * toggle false -> true -> neither -> false ...
 	 */
-	public toggleForward() {
+	toggleForward(): TrinaryValue {
 		this.value = Math.abs((this.value + 1) % 3);
+		return this.value;
 	}
 	/**
 	 * toggleBack false -> neither -> true -> false ...
 	 */
-	public toggleBack() {
+	toggleBack(): TrinaryValue {
 		this.value = Math.abs((this.value + 2) % 3);
+		return this.value;
 	}
 }

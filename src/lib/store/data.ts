@@ -1,6 +1,8 @@
 import { browser } from '$app/environment';
+import { Trinary, TrinaryValue } from '$lib/utilities/DarkLight/trinary';
+import { localStorageStore } from '@skeletonlabs/skeleton';
 import type { Writable } from 'svelte/store';
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import typia from 'typia';
 import bigrams from './bigrams';
 import type { CodeLanguages, CodeMap } from './code';
@@ -19,27 +21,11 @@ export enum SoundIndex {
 	wrongletter,
 	passedGoals,
 	failedGoals,
-	lessonsDone
+	lessonsDone,
 }
-export const SoundNames = [
-	'Right Letter',
-	'Wrong Letter',
-	'Passed Goals',
-	'Failed Goals',
-	'Lessons Done'
-];
+export const SoundNames = ['Right Letter', 'Wrong Letter', 'Passed Goals', 'Failed Goals', 'Lessons Done'];
 
-export const ScopeNames = [
-	'Top 50',
-	'Top 100',
-	'Top 200',
-	'Top 500',
-	'Top 1000',
-	'Top 2000',
-	'Top 4000',
-	'Top 8000',
-	'Top 16000'
-];
+export const ScopeNames = ['Top 50', 'Top 100', 'Top 200', 'Top 500', 'Top 1000', 'Top 2000', 'Top 4000', 'Top 8000', 'Top 16000'];
 export const ScopeValues = [50, 100, 200, 500, 1000, 2000, 4000, 8000, 16000];
 
 export enum LanguageIndex {
@@ -51,19 +37,9 @@ export enum LanguageIndex {
 	languagePython,
 	languageRust,
 	languageSwift,
-	languageTypescript
+	languageTypescript,
 }
-export const LanguageNames = [
-	'C++',
-	'C#',
-	'Go',
-	'Java',
-	'Javascript',
-	'Python',
-	'Rust',
-	'Swift',
-	'Typescript'
-];
+export const LanguageNames = ['C++', 'C#', 'Go', 'Java', 'Javascript', 'Python', 'Rust', 'Swift', 'Typescript'];
 
 // Indexes both Sources and their options
 export enum OptionIndex {
@@ -75,17 +51,9 @@ export enum OptionIndex {
 	pangrams,
 	words,
 	code_words,
-	custom_words
+	custom_words,
 }
-export const SourceNames = [
-	'Bigrams',
-	'Trigrams',
-	'Tetragrams',
-	'Pentagrams',
-	'Hexagrams',
-	'Pangrams',
-	'Words'
-]; // Code Words, Custom Words
+export const SourceNames = ['Bigrams', 'Trigrams', 'Tetragrams', 'Pentagrams', 'Hexagrams', 'Pangrams', 'Words']; // Code Words, Custom Words
 class SourceOptions {
 	scope: number = 50;
 	combination: number = 2;
@@ -108,17 +76,7 @@ class OptionsClass {
 }
 
 export class XgramSources {
-	source: string[][] = [
-		bigrams,
-		trigrams,
-		tetragrams,
-		pentagrams,
-		hexagrams,
-		pangrams,
-		words,
-		[],
-		[]
-	];
+	source: string[][] = [bigrams, trigrams, tetragrams, pentagrams, hexagrams, pangrams, words, [], []];
 	code: CodeMap = code;
 }
 
@@ -143,7 +101,7 @@ export class XgramData {
 		new SourceOptions(),
 		new SourceOptions(),
 		new SourceOptions(),
-		new SourceOptions()
+		new SourceOptions(),
 	];
 
 	public source: number = OptionIndex.bigrams;
@@ -152,20 +110,15 @@ export class XgramData {
 
 class MyStore {
 	constructor(
-		public data: Writable<XgramData> = writable<XgramData>(
-			browser && sessionStorage.getItem('data')
-				? typia.assertParse<XgramData>(sessionStorage.getItem('data') ?? '')
-				: new XgramData()
-		),
+		public data: Writable<XgramData> = writable<XgramData>(browser && localStorage.getItem('data') ? typia.assertParse<XgramData>(localStorage.getItem('data') ?? '') : new XgramData()),
 		public settings: Writable<XgramSettings> = writable<XgramSettings>(
-			browser && sessionStorage.getItem('settings')
-				? typia.assertParse<XgramSettings>(sessionStorage.getItem('settings') ?? '')
-				: new XgramSettings()
+			browser && 'settings' in localStorage ? typia.assertParse<XgramSettings>(localStorage.getItem('settings') ?? '') : new XgramSettings()
 		),
 		public sources: Writable<XgramSources> = writable<XgramSources>(
-			browser && sessionStorage.getItem('sources')
-				? typia.assertParse<XgramSources>(sessionStorage.getItem('sources') ?? '') ?? ''
-				: new XgramSources()
+			browser && 'sources' in localStorage ? typia.assertParse<XgramSources>(localStorage.getItem('sources') ?? '') ?? '' : new XgramSources()
+		),
+		public userDarkLight: Writable<TrinaryValue> = writable<TrinaryValue>(
+			browser && 'userDarkLight' in localStorage ? typia.assertParse<TrinaryValue>(localStorage.getItem('userDarkLight') ?? '') : TrinaryValue.neither
 		)
 	) {
 		if (browser) {
@@ -173,17 +126,21 @@ class MyStore {
 				// Skanky data manipulation TODO move to a dialog triggered function
 				value.currentOptions = value.sourceOptions[value.source];
 
-				let s = typia.assertStringify<XgramData>(value);
-				sessionStorage.data = s;
+				localStorage.data = typia.assertStringify<XgramData>(value);
+				// let s = typia.assertStringify<XgramData>(value);
+				// localStorage.data = s;
 				// console.log('data assertStringify:' + s.slice(0, 100));
 			});
 			this.settings.subscribe((value) => {
-				let s = typia.assertStringify<XgramSettings>(value);
-				sessionStorage.sources = s;
+				localStorage.settings = typia.assertStringify<XgramSettings>(value);
 			});
 			this.sources.subscribe((value) => {
-				let s = typia.assertStringify<XgramSources>(value);
-				sessionStorage.sources = s;
+				localStorage.sources = typia.assertStringify<XgramSources>(value);
+			});
+			this.userDarkLight.subscribe((value) => {
+				// get(this.userDarkLight).toggleBack();
+				// console.log('data assertStringify:' + JSON.stringify(value));
+				localStorage.userDarkLight = typia.assertStringify<TrinaryValue>(value);
 			});
 		}
 	}
@@ -191,6 +148,7 @@ class MyStore {
 
 // if (browser) {
 // 	sessionStorage.clear();
+// 	localStorage.clear();
 // 	console.log('\nCLEARED\n');
 // }
 

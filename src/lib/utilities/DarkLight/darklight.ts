@@ -1,22 +1,21 @@
-// Lightswitch Service
+// DarkLight Service
+import { browser } from '$app/environment';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 import type { Writable } from 'svelte/store';
 import { get } from 'svelte/store';
 import type { DarkLightWindow } from './darklight.window';
-import { Trinary } from './trinary';
-import { TrinaryValue } from './trinary.d';
+import { Trinary, TrinaryValue } from './trinary';
 
 // Stores ---
 // true: light, false: dark, neither: use OS value
 
+import { myStore } from '$lib/store/data';
+import typia from 'typia';
+/** Store: User Preference Mode */
+const { userDarkLight } = myStore;
+
 // Save user setting to window for access by osDarkLightWatcher
 declare let window: DarkLightWindow;
-
-/** Store: User Preference Mode */
-export const darklightUser: Writable<Trinary> = localStorageStore<Trinary>(
-	'darklightUser',
-	new Trinary(TrinaryValue.neither)
-);
 
 /** Store: Current Mode State */
 export const currentDarklight = localStorageStore<boolean>('currentDarklight', false);
@@ -24,47 +23,63 @@ export const currentDarklight = localStorageStore<boolean>('currentDarklight', f
 // Get ---
 
 /** Get the OS Preference for light/dark mode */
-function getModeOsPrefers(): boolean {
-	const prefersLightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
-	return prefersLightMode;
+function getOSDarkLight(): boolean {
+	const osDarkLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+	return osDarkLight;
 }
 
 /** Get the User for light/dark mode */
-function getModeUserPrefers(): Trinary {
-	return get(darklightUser);
+function getUserDarkLight(): TrinaryValue {
+	return get(userDarkLight);
 }
 
-/** Get the dark light mode */
-export function getDarkLightMode(): boolean {
-	let user = getModeUserPrefers();
-	let modeValue;
-	switch (user.value) {
+/** Adjust the final dark light mode from combined user and OS preferences */
+export function adjustFinalDarkLight(): boolean {
+	let userDarkLight = getUserDarkLight();
+	let finalDarkLight;
+	switch (userDarkLight) {
 		case TrinaryValue.neither:
-			let os = getModeOsPrefers();
-			modeValue = os;
-			// console.log('getDarkLightMode() modeValue os:' + modeValue);
+			let os = getOSDarkLight();
+			finalDarkLight = os;
+			// console.log('getFinalDarkLight() finalDarkLight os:' + finalDarkLight);
 			break;
 		case TrinaryValue.true:
-			modeValue = true;
-			// console.log('getDarkLightMode() modeValue light:' + modeValue);
+			finalDarkLight = true;
+			// console.log('getFinalDarkLight() finalDarkLight light:' + finalDarkLight);
 			break;
 		default:
-			// console.log('getDarkLightMode() modeValue dark:' + modeValue);
-			modeValue = false;
+			// console.log('getFinalDarkLight() finalDarkLight dark:' + finalDarkLight);
+			finalDarkLight = false;
 			break;
 	}
-	return modeValue;
+	setCurrentDarkLight(finalDarkLight);
+	return finalDarkLight;
 }
 
 // Set ---
 /** Set the User Preference for light/dark mode */
 export function setUserDarkLight(value: TrinaryValue): void {
-	get(darklightUser).value = value;
+	userDarkLight.set(value);
 	window.userDarkLight = value;
 }
 
+/**
+ * toggle false -> true -> neither -> false ...
+ */
+export function toggleForwardUserDarkLight(): TrinaryValue {
+	userDarkLight.set(Math.abs((get(userDarkLight) + 1) % 3));
+	return get(userDarkLight);
+}
+/**
+ * toggleBack false -> neither -> true -> false ...
+ */
+export function toggleBackUserDarkLight(): TrinaryValue {
+	userDarkLight.set(Math.abs((get(userDarkLight) + 2) % 3));
+	return get(userDarkLight);
+}
+
 /** Set the the current light/dark mode */
-export function setDarkLightCurrent(value: boolean) {
+function setCurrentDarkLight(value: boolean) {
 	const elemHtmlClasses = document.documentElement.classList;
 	const classDark = `dark`;
 	value === true ? elemHtmlClasses.remove(classDark) : elemHtmlClasses.add(classDark);
@@ -77,20 +92,27 @@ export function setDarkLightCurrent(value: boolean) {
 export function initializeDarkLight() {
 	const elemHtmlClasses = document.documentElement.classList;
 	const osPrefersDark: boolean = window.matchMedia('(prefers-color-scheme: dark)').matches;
-	// console.log('\nprefersDarkOS:' + osPrefersDark);
-	if ('darklightUser' in localStorage) {
-		if (Number(localStorage.getItem('darklightUser')) == 1) {
+	// console.log('\nosPrefersDark:' + osPrefersDark);
+	if ('userDarkLight' in localStorage) {
+		// let s = localStorage.getItem('userDarkLight') ?? '';
+		// let aDarkLight = Number(JSON.parse(s));
+		// console.log('aDarkLight:' + aDarkLight);
+		if (Number(localStorage.getItem('userDarkLight')) == 1) {
 			//TrinaryValue.true
+			// console.log('userDarkLight: TrinaryValue.true');
 			window.userDarkLight = 1;
 			elemHtmlClasses.remove('dark');
 			return;
-		} else if (Number(localStorage.getItem('darklightUser')) == 0) {
+		} else if (Number(localStorage.getItem('userDarkLight')) == 0) {
 			//TrinaryValue.false
+			// console.log('userDarkLight: TrinaryValue.false');
 			window.userDarkLight = 0;
 			elemHtmlClasses.add('dark');
 			return;
 		}
 	}
+	//TrinaryValue.neither
+	// console.log('userDarkLight: TrinaryValue.neither');
 	window.userDarkLight = 2;
 	if (osPrefersDark) {
 		elemHtmlClasses.add('dark');
@@ -106,6 +128,14 @@ export function osDarkLightWatcher(): void {
 	const mql = window.matchMedia('(prefers-color-scheme: light)');
 	function setMode(value: boolean) {
 		// console.log('osDarkLightWatcher value:' + value);
+		// let userDarkLight = browser && 'userDarkLight' in localStorage ? typia.assertParse<Trinary>(localStorage.getItem('userDarkLight') ?? '') : new Trinary(TrinaryValue.neither);
+		// console.log('userDarkLight:' + userDarkLight);
+		// console.log('userDarkLight type:' + typeof userDarkLight + userDarkLight);
+
+		// TrinaryValue.neither
+
+		// if (Number(localStorage.getItem('userDarkLight') ?? '2') == 2) {
+		// How would one use common code here? TODO
 		if (window.userDarkLight == 2) {
 			const elemHtmlClasses = document.documentElement.classList;
 			const classDark = `dark`;
