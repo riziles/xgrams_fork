@@ -39,11 +39,7 @@
 
 	function initializeLesson() {
 		let dataSource = $data.currentOptions;
-		dataSource.phrases = generatePhrases(
-			dataSource.combination,
-			dataSource.repetition,
-			dataSource.filter
-		);
+		dataSource.phrases = generatePhrases(dataSource.combination, dataSource.repetition, dataSource.filter);
 		expectedPhrase = dataSource.phrases[0] || '';
 		dataSource.phrasesCurrentIndex = 0;
 		initializePhrase();
@@ -118,18 +114,11 @@
 		typingChar: 2,
 		betterChar: 3,
 		failedChar: 4,
-		remedyChar: 5
+		remedyChar: 5,
 	};
 	let colorPhrase: number[] = [];
 
-	const ClassSpan = [
-		'',
-		'normalChar',
-		'typingChar',
-		'betterChar',
-		'failedChar',
-		'remedyChar'
-	] as const;
+	const ClassSpan = ['', 'normalChar', 'typingChar', 'betterChar', 'failedChar', 'remedyChar'] as const;
 	type ClassPhrase = { class: string; chars: string; typing: boolean };
 	let classPhrase: ClassPhrase[] = [];
 
@@ -139,7 +128,7 @@
 		let currentClass: ClassPhrase = {
 			class: ClassSpan[ColorChars.typingChar],
 			chars: '',
-			typing: false
+			typing: false,
 		};
 		let aClassPhrase: ClassPhrase[] = [];
 		let typingIndex = typedPhrase.length;
@@ -356,8 +345,7 @@
 	on:blur={handleBlur}
 	on:mouseover={handleMouseOver}
 	on:mouseleave={handleMouseLeave}
-	tabindex="-1"
->
+	tabindex="-1">
 	<!-- <h3 class="font-sans">
 		<span class={'font-sans ' + ClassSpan[ColorChars.normalChar]}>
 			{expectedPhrase}
@@ -366,9 +354,7 @@
 	<h3>
 		{#each classPhrase as cp}
 			{#if cp.typing}
-				<span class={'font-sans ' + cp.class + ' ' + ClassSpan[ColorChars.typingChar]}
-					>{cp.chars}</span
-				>
+				<span class={'font-sans ' + cp.class + ' ' + ClassSpan[ColorChars.typingChar]}>{cp.chars}</span>
 			{:else}
 				<span class={'font-sans ' + cp.class}>{cp.chars}</span>
 			{/if}

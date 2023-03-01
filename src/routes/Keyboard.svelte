@@ -43,30 +43,19 @@
 	function keyDown(event: KeyboardEvent) {
 		if (event.metaKey) return;
 
-		document
-			.querySelector(`[data-key="${event.key}" i]`)
-			?.dispatchEvent(new MouseEvent('click', { cancelable: true }));
+		document.querySelector(`[data-key="${event.key}" i]`)?.dispatchEvent(new MouseEvent('click', { cancelable: true }));
 	}
 </script>
 
 <div class="keyboard">
 	<button data-key="enter" class:selected={submittable} disabled={!submittable}>enter</button>
 
-	<button on:click|preventDefault={update} data-key="backspace" name="key" value="backspace">
-		back
-	</button>
+	<button on:click|preventDefault={update} data-key="backspace" name="key" value="backspace">back</button>
 
 	{#each ['`1234567890-=', 'qwertyuiop[]\\', "asdfghjkl;'", 'zxcvbnm,.'] as row}
 		<div class="row">
 			{#each row as letter}
-				<button
-					on:click|preventDefault={update}
-					data-key={letter}
-					class={classnames[letter]}
-					name="key"
-					value={letter}
-					aria-label="{letter} {description[letter] || ''}"
-				>
+				<button on:click|preventDefault={update} data-key={letter} class={classnames[letter]} name="key" value={letter} aria-label="{letter} {description[letter] || ''}">
 					{letter}
 				</button>
 			{/each}

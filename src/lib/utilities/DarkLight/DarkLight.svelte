@@ -1,12 +1,8 @@
 <script lang="ts">
-	import { get } from 'svelte/store';
-	import { adjustFinalDarkLight, currentDarklight, initializeDarkLight, toggleBackUserDarkLight } from './darklight';
+	import { adjustFinalDarkLight, currentDarklight, initializeDarkLight, toggleBackUserDarkLight, userDarkLight } from './darklight';
 	// Types
 	import type { CssClasses } from '@skeletonlabs/skeleton';
 	type OnKeyDownEvent = KeyboardEvent & { currentTarget: EventTarget & HTMLDivElement };
-
-	import { myStore } from '$lib/store/data';
-	const { userDarkLight } = myStore;
 
 	// Props
 	/** Provide classes to set width styles. */

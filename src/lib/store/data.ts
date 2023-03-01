@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { Trinary, TrinaryValue } from '$lib/utilities/DarkLight/trinary';
+import { TrinaryValue } from '$lib/utilities/DarkLight/trinary';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 import type { Writable } from 'svelte/store';
 import { get, writable } from 'svelte/store';
@@ -116,11 +116,11 @@ class MyStore {
 		),
 		public sources: Writable<XgramSources> = writable<XgramSources>(
 			browser && 'sources' in localStorage ? typia.assertParse<XgramSources>(localStorage.getItem('sources') ?? '') ?? '' : new XgramSources()
-		),
-		public userDarkLight: Writable<TrinaryValue> = writable<TrinaryValue>(
-			browser && 'userDarkLight' in localStorage ? typia.assertParse<TrinaryValue>(localStorage.getItem('userDarkLight') ?? '') : TrinaryValue.neither
 		)
 	) {
+		// public userDarkLight: Writable<TrinaryValue> = writable<TrinaryValue>(
+		// 	browser && 'userDarkLight' in localStorage ? typia.assertParse<TrinaryValue>(localStorage.getItem('userDarkLight') ?? '') : TrinaryValue.neither
+
 		if (browser) {
 			this.data.subscribe((value) => {
 				// Skanky data manipulation TODO move to a dialog triggered function
@@ -137,11 +137,11 @@ class MyStore {
 			this.sources.subscribe((value) => {
 				localStorage.sources = typia.assertStringify<XgramSources>(value);
 			});
-			this.userDarkLight.subscribe((value) => {
-				// get(this.userDarkLight).toggleBack();
-				// console.log('data assertStringify:' + JSON.stringify(value));
-				localStorage.userDarkLight = typia.assertStringify<TrinaryValue>(value);
-			});
+			// this.userDarkLight.subscribe((value) => {
+			// 	// get(this.userDarkLight).toggleBack();
+			// 	// console.log('data assertStringify:' + JSON.stringify(value));
+			// 	localStorage.userDarkLight = typia.assertStringify<TrinaryValue>(value);
+			// });
 		}
 	}
 }

@@ -59,21 +59,9 @@
 	<!-- minute hand -->
 	<g transform="rotate({6 * minutes})">
 		<line class="minute" y1="0" y2="-20" />
-		<circle
-			class="minute"
-			r={9 * (1 - Math.cos((seconds / 30) * Math.PI))}
-			cx="0"
-			cy="0"
-			style="fill-opacity: .05;"
-		/>
+		<circle class="minute" r={9 * (1 - Math.cos((seconds / 30) * Math.PI))} cx="0" cy="0" style="fill-opacity: .05;" />
 		<line class="minute-counterweight" y1="-15" y2="-17" />
-		<circle
-			class="minute"
-			r={3 * (1 + Math.cos((seconds / 30) * Math.PI))}
-			cx="0"
-			cy="-29"
-			style="fill-opacity: .25;"
-		/>
+		<circle class="minute" r={3 * (1 + Math.cos((seconds / 30) * Math.PI))} cx="0" cy="-29" style="fill-opacity: .25;" />
 	</g>
 
 	<!-- second hand -->

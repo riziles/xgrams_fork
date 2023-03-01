@@ -4,20 +4,18 @@ import { localStorageStore } from '@skeletonlabs/skeleton';
 import type { Writable } from 'svelte/store';
 import { get } from 'svelte/store';
 import type { DarkLightWindow } from './darklight.window';
-import { Trinary, TrinaryValue } from './trinary';
-
-// Stores ---
-// true: light, false: dark, neither: use OS value
-
-import { myStore } from '$lib/store/data';
-import typia from 'typia';
-/** Store: User Preference Mode */
-const { userDarkLight } = myStore;
+import { TrinaryValue } from './trinary';
 
 // Save user setting to window for access by osDarkLightWatcher
 declare let window: DarkLightWindow;
 
-/** Store: Current Mode State */
+// Stores ---
+// true: light, false: dark, neither: use OS value
+
+/** Store: User Darklight State */
+export const userDarkLight = localStorageStore<TrinaryValue>('userDarkLight', TrinaryValue.neither);
+
+/** Store: Current Darklight State */
 export const currentDarklight = localStorageStore<boolean>('currentDarklight', false);
 
 // Get ---
@@ -127,15 +125,7 @@ export function initializeDarkLight() {
 export function osDarkLightWatcher(): void {
 	const mql = window.matchMedia('(prefers-color-scheme: light)');
 	function setMode(value: boolean) {
-		// console.log('osDarkLightWatcher value:' + value);
-		// let userDarkLight = browser && 'userDarkLight' in localStorage ? typia.assertParse<Trinary>(localStorage.getItem('userDarkLight') ?? '') : new Trinary(TrinaryValue.neither);
-		// console.log('userDarkLight:' + userDarkLight);
-		// console.log('userDarkLight type:' + typeof userDarkLight + userDarkLight);
-
 		// TrinaryValue.neither
-
-		// if (Number(localStorage.getItem('userDarkLight') ?? '2') == 2) {
-		// How would one use common code here? TODO
 		if (window.userDarkLight == 2) {
 			const elemHtmlClasses = document.documentElement.classList;
 			const classDark = `dark`;
