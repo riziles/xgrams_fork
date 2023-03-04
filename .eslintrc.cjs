@@ -20,5 +20,13 @@ module.exports = {
 	rules: {
 		'comma-dangle': 'always',
 		'@typescript-eslint/comma-dangle': ['error', 'always'],
+		'object-property-newline': ['error', { allowAllPropertiesOnSameLine: true }],
+		'array-element-newline': [
+			'error',
+			{
+				ArrayExpression: { minItems: 2 },
+				ArrayPattern: { minItems: 2 },
+			},
+		],
 	},
 };

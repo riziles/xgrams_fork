@@ -119,6 +119,7 @@ const pangrams = [
 	'Sixty zips were quickly picked from the woven jute bag.',
 	'Sphinx of black quartz, judge my vow!',
 	'Squdgy fez, blank jimp crwth vox!',
+	'Supercalifragilisticexpialidocious quinoa azyme jive bokeh awe.',
 	'Sympathizing would fix Quaker objectives.',
 	'That quick beige fox jumped in the air over each thin dog. Look out, I shout, for he’s foiled you again, creating chaos.',
 	'The five boxing wizards jump quickly.',
