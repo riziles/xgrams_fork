@@ -19,6 +19,7 @@
 		"@playwright/test": "^1.28.1",
 		"@rollup/plugin-typescript": "^11.0.0",
 		"@skeletonlabs/skeleton": "^0.132.5",
+		"@sveltejs/adapter-netlify": "^1.0.0-next.88",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
 		"@tailwindcss/forms": "^0.5.3",
