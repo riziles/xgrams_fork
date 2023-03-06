@@ -22,4 +22,3 @@ vite.config.ts.timestamp-*
 *.sln
 *.sw?
 
-.netlify/
