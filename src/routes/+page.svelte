@@ -5,14 +5,14 @@
 
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="space-y-10 text-center">
-		<div class="space-y-2">
+		<div class="text-3xl space-y-2">
 			Use this link instead: <a class = "text-3xl" href = 'https://xgrams.vercel.app/'>https://xgrams.vercel.app/</a>
-			<div>
+			<!-- <div>
 				<Typist />
 			</div>
 			<div>
 				<Keyboard />
-			</div>
+			</div> -->
 		</div>
 	</div>
 </div>
