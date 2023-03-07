@@ -63,7 +63,6 @@
 		</Darklight>
 	</svelte:fragment>
 	<svelte:fragment slot="default"><h1><span class="gradient-heading">Xgrams</span></h1></svelte:fragment>
-	<svelte:fragment slot="trail"><button class="btn-icon" on:click={drawerOpen}><h1>🧜‍♀️</h1></button></svelte:fragment>
 </AppBar>
 
 <section><slot /></section>

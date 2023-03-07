@@ -3,14 +3,11 @@
 	import Typist from './Typist.svelte';
 </script>
 
-<div class="container h-full mx-auto flex justify-center items-center">
+<div class="container text-3xl h-full mx-auto flex justify-center items-center">
 	<div class="space-y-10 text-center">
 		<div class="space-y-2">
 			<div>
 				<Typist />
-			</div>
-			<div>
-				<Keyboard />
 			</div>
 		</div>
 	</div>
