@@ -1,0 +1,6 @@
+{
+	"runtime": "nodejs18.x",
+	"handler": "..\\..\\..\\..\\..\\LocalTemp\\Repos\\GitHub\\xgrams_fork\\.svelte-kit\\vercel-tmp\\index.js",
+	"launcherType": "Nodejs",
+	"experimentalResponseStreaming": true
+}
