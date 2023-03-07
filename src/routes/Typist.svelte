@@ -346,7 +346,30 @@
 	on:mouseover={handleMouseOver}
 	on:mouseleave={handleMouseLeave}
 	tabindex="-1">
-	Use this link instead: <a href = 'https://xgrams.vercel.app/'>https://xgrams.vercel.app/</a>
+	<!-- <h3 class="font-sans">
+		<span class={'font-sans ' + ClassSpan[ColorChars.normalChar]}>
+			{expectedPhrase}
+		</span>
+	</h3> -->
+	<h3>
+		{#each classPhrase as cp}
+			{#if cp.typing}
+				<span class={'font-sans ' + cp.class + ' ' + ClassSpan[ColorChars.typingChar]}>{cp.chars}</span>
+			{:else}
+				<span class={'font-sans ' + cp.class}>{cp.chars}</span>
+			{/if}
+		{/each}
+	</h3>
+	<h4 class="flex place-content-evenly gap-x-3 mt-6">
+		<div>
+			<strong>Lesson {phrasesCurrentIndex} / {$data.currentOptions.phrases.length}</strong>
+		</div>
+	</h4>
+	<h4 class="flex place-content-evenly gap-x-3 mt-0">
+		<div>WPM: {rawWPM}</div>
+		<div>Accuracy: {accuracy}%</div>
+		<div>Average WPM: {averageWPM()}</div>
+	</h4>
 </div>
 <div>
 	<Timer />
