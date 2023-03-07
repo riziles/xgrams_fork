@@ -6,8 +6,9 @@
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="space-y-10 text-center">
 		<div class="space-y-2">
+			Use this link instead: <a href = 'https://xgrams.vercel.app/'>https://xgrams.vercel.app/</a>
 			<div>
-				Use this link instead: <a href = 'https://xgrams.vercel.app/'>https://xgrams.vercel.app/</a>
+				<Typist />
 			</div>
 			<div>
 				<Keyboard />
