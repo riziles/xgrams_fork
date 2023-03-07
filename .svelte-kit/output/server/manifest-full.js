@@ -6,11 +6,18 @@ export const manifest = {
 	_: {
 		client: {"start":{"file":"_app/immutable/entry/start.c7da2972.js","imports":["_app/immutable/entry/start.c7da2972.js","_app/immutable/chunks/index.10276ae2.js","_app/immutable/chunks/singletons.3d8c4923.js","_app/immutable/chunks/index.c1883294.js"],"stylesheets":[],"fonts":[]},"app":{"file":"_app/immutable/entry/app.ebf02406.js","imports":["_app/immutable/entry/app.ebf02406.js","_app/immutable/chunks/index.10276ae2.js"],"stylesheets":[],"fonts":[]}},
 		nodes: [
-			() => import('../output/server/nodes/0.js'),
-			() => import('../output/server/nodes/1.js')
+			() => import('./nodes/0.js'),
+			() => import('./nodes/1.js'),
+			() => import('./nodes/2.js')
 		],
 		routes: [
-			
+			{
+				id: "/",
+				pattern: /^\/$/,
+				params: [],
+				page: { layouts: [0], errors: [1], leaf: 2 },
+				endpoint: null
+			}
 		],
 		matchers: async () => {
 			
