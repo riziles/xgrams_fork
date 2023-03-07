@@ -309,7 +309,7 @@ const css = {
 };
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$result.css.add(css);
-  return `<div class="${"container h-full mx-auto flex justify-center items-center"}"><div class="${"space-y-10 text-center"}"><div class="${"space-y-2"}">Use this link instead: <a href="${"https://xgrams.vercel.app/"}">https://xgrams.vercel.app/</a>
+  return `<div class="${"container h-full mx-auto flex justify-center items-center"}"><div class="${"space-y-10 text-center"}"><div class="${"space-y-2"}">Use this link instead: <a class="${"text-3xl"}" href="${"https://xgrams.vercel.app/"}">https://xgrams.vercel.app/</a>
 			<div>${validate_component(Typist, "Typist").$$render($$result, {}, {}, {})}</div>
 			<div>${validate_component(Keyboard, "Keyboard").$$render($$result, {}, {}, {})}</div></div></div>
 </div>`;
